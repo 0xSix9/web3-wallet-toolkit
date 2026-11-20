@@ -3,6 +3,7 @@ import {
   disconnectWallet,
   getWalletState,
   subscribeToWallet,
+  supportedNetworks,
   switchNetwork,
 } from "./lib/wallet/index.js";
 
@@ -13,6 +14,19 @@ const chainId = document.getElementById("chain-id");
 const networkSelect = document.getElementById("network-select");
 const disconnectButton = document.getElementById("disconnect-button");
 const feedback = document.getElementById("feedback");
+
+// Build the selector from the same network list used by AppKit.
+// This avoids keeping two separate network lists in sync by hand.
+function populateNetworkSelect() {
+  const options = supportedNetworks.map((network) => {
+    const option = document.createElement("option");
+    option.value = String(network.id);
+    option.textContent = network.name;
+    return option;
+  });
+
+  networkSelect.append(...options);
+}
 
 function shortenAddress(address) {
   if (!address) return "—";
@@ -35,12 +49,10 @@ function renderWallet(state) {
 
   networkSelect.disabled = !connected;
   disconnectButton.disabled = !connected;
-
-  if (state.chainId) {
-    networkSelect.value = String(state.chainId);
-  }
+  networkSelect.value = state.chainId == null ? "" : String(state.chainId);
 }
 
+populateNetworkSelect();
 subscribeToWallet(renderWallet);
 renderWallet(getWalletState());
 
@@ -53,7 +65,7 @@ disconnectButton.addEventListener("click", async () => {
     feedback.textContent = "Wallet disconnected.";
   } catch (error) {
     feedback.textContent = error?.message ?? "Could not disconnect the wallet.";
-    disconnectButton.disabled = false;
+    disconnectButton.disabled = !getWalletState().isConnected;
   }
 });
 
