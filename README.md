@@ -235,7 +235,7 @@ web3-wallet-toolkit/
 ## Configuration
 
 - **Reown Project ID:** set `VITE_REOWN_PROJECT_ID` in your local environment file.
-- **Supported networks:** edit `src/lib/wallet/networks.js`.
+- **Supported networks:** edit `src/lib/wallet/networks.js`. The AppKit configuration and the demo's network selector both use this same list, so new entries appear in the selector automatically.
 - **Default network:** change the `defaultNetwork` export in `networks.js`.
 - **App metadata and theme:** edit `src/lib/wallet/appkit.js`.
 
