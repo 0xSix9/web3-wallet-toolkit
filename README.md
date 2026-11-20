@@ -52,6 +52,19 @@ An RPC provider such as Infura is useful when your app needs to read blockchain 
 
 Never put private credentials in frontend code. Any key shipped to a browser can be inspected by users. If a provider requires a browser-side project key, restrict it by allowed origins and usage limits wherever those controls are available.
 
+## Do I need a Reown Project ID?
+
+**Not for the current version of this repository.** The demo connects directly to browser-injected wallets through `window.ethereum` and the EIP-1193 API. It does not currently use Reown AppKit or WalletConnect, so a Reown Project ID is not required and adding one to `.env` will not change how this demo works.
+
+If you want to add WalletConnect/Reown support in a future version:
+
+1. Open the [Reown Dashboard](https://dashboard.reown.com/).
+2. Sign in and create a project (or open an existing project).
+3. Open that project and copy its **Project ID** from the project details/settings.
+4. Store it in your local `.env` file as `VITE_REOWN_PROJECT_ID=your_project_id` only after the app has been updated to read that variable.
+
+The Project ID is a public application identifier, not a private key. Do not confuse it with an Infura API key: they belong to different services and serve different purposes. Do not copy someone else's Project ID into your own app; create your own Reown project.
+
 ## Project structure
 
 ```text
