@@ -41,6 +41,10 @@ The supported list is in `src/lib/wallet/networks.js`. Remove networks you do no
 - npm
 - A Reown AppKit Project ID from the [Reown Dashboard](https://dashboard.reown.com/)
 
+### Reown package versions
+
+The AppKit core and Ethers adapter are intentionally pinned to the same `1.8.24` release so their APIs stay aligned with the 1.x implementation used by this starter. Reown 2.x is now available; treat upgrading to it as a separate migration and update both packages together after checking the current migration guidance. Do not bump only one of the two packages.
+
 ## Run the example
 
 ### 1. Get your own Reown Project ID
