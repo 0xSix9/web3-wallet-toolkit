@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A beginner-friendly, reusable EVM wallet connection toolkit built with vanilla JavaScript." />
+    <title>Web3 Wallet Toolkit</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="Web3 Wallet Toolkit home">
+          <span class="brand-mark">W</span><span>Web3 Wallet Toolkit</span>
+        </a>
+        <span class="version-label">VANILLA JAVASCRIPT</span>
+      </header>
+      <main>
+        <section class="intro">
+          <p class="eyebrow">LEARN · CONNECT · BUILD</p>
+          <h1>A simple starting point for <span>EVM wallets.</span></h1>
+          <p class="intro-copy">Explore wallet connection, account events, and network switching with small, reusable JavaScript modules.</p>
+        </section>
+        <section class="wallet-card" aria-labelledby="wallet-title">
+          <div class="card-heading">
+            <div><p class="eyebrow">WALLET PLAYGROUND</p><h2 id="wallet-title">Wallet connection</h2></div>
+            <span id="connection-status" class="status-pill" role="status">Not connected</span>
+          </div>
+          <div class="wallet-details">
+            <div class="detail-row"><span class="detail-label">Account</span><code id="account-address">—</code></div>
+            <div class="detail-row"><span class="detail-label">Network</span><span id="network-name">—</span></div>
+            <div class="detail-row"><span class="detail-label">Chain ID</span><code id="chain-id">—</code></div>
+          </div>
+          <div class="actions">
+            <button id="connect-button" class="button button-primary" type="button">Connect wallet</button>
+            <button id="disconnect-button" class="button button-secondary" type="button" disabled>Disconnect</button>
+          </div>
+          <label class="network-field" for="network-select">
+            <span class="detail-label">Switch network</span>
+            <select id="network-select" disabled>
+              <option value="0x1">Ethereum</option>
+              <option value="0x38">BNB Smart Chain</option>
+              <option value="0x2105">Base</option>
+            </select>
+          </label>
+          <p id="feedback" class="feedback" aria-live="polite">Connect an injected wallet such as MetaMask to get started.</p>
+        </section>
+        <section class="learning-note">
+          <h2>What this demo teaches</h2>
+          <ul>
+            <li>Requesting wallet access with <code>eth_requestAccounts</code>.</li>
+            <li>Reading the active account and chain with EIP-1193.</li>
+            <li>Listening for account and network changes.</li>
+            <li>Requesting a network switch with <code>wallet_switchEthereumChain</code>.</li>
+          </ul>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <span>Open source learning project</span>
+        <a href="https://github.com/0xSix9/web3-wallet-toolkit" target="_blank" rel="noreferrer">View on GitHub ↗</a>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
