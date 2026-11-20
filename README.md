@@ -44,14 +44,6 @@ A modular, beginner-friendly EVM wallet connection starter built with **vanilla 
 4. Open the local URL printed by Vite, unlock your browser wallet, and click **Connect wallet**.
 5. Create a production build with `npm run build`; preview it with `npm run preview`.
 
-## Do I need an Infura API key?
-
-**No — not for this wallet connection demo.** The browser wallet injects an EIP-1193 provider (commonly available as `window.ethereum`). This toolkit asks that provider for account and chain information. It does not require an Infura project ID or a custom RPC endpoint for these operations.
-
-An RPC provider such as Infura is useful when your app needs to read blockchain data independently of the user's wallet, such as public contract data while no wallet is connected. That can be added as a separate module later.
-
-Never put private credentials in frontend code. Any key shipped to a browser can be inspected by users. If a provider requires a browser-side project key, restrict it by allowed origins and usage limits wherever those controls are available.
-
 ## Do I need a Reown Project ID?
 
 **Not for the current version of this repository.** The demo connects directly to browser-injected wallets through `window.ethereum` and the EIP-1193 API. It does not currently use Reown AppKit or WalletConnect, so a Reown Project ID is not required and adding one to `.env` will not change how this demo works.
