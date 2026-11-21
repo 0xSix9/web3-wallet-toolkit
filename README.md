@@ -44,7 +44,7 @@ web3-wallet-toolkit/
 | Reuse wallet connection in another dApp | `02-wallet-module/` |
 | Understand or run the automated tests | `03-tests/` |
 | Change dependencies or run commands | `package.json` |
-| Configure the Reown Project ID | `.env` |
+| Configure the Reown Project ID | `.env.example` (copy it to create `.env`) |
 
 ## Features
 
@@ -157,7 +157,7 @@ Create or update the `.env` file in your dApp's project root:
 VITE_REOWN_PROJECT_ID=your_actual_reown_project_id
 ```
 
-This module expects a Vite-style `import.meta.env` environment. Other build tools may require adapting how the Project ID is provided.
+This module expects a Vite-style `import.meta.env` environment. Other build tools may require adapting how the Project ID is provided. The reusable module is currently shared as source code to copy into a dApp, not as an npm package.
 
 ### 3. Import the wallet API
 
@@ -220,8 +220,8 @@ const unsubscribe = subscribeToWallet((wallet) => {
   console.log("Chain ID:", wallet.chainId);
 });
 
-// Call this when the part of your app using the subscription is removed.
-unsubscribe();
+// Call unsubscribe() when the UI using this listener is removed.
+// For example, call it from your component's cleanup function.
 ```
 
 The state has this shape:
@@ -272,7 +272,7 @@ Use the provider for read-only blockchain calls and the signer for user-approved
 
 | File | What it controls |
 | --- | --- |
-| `.env` | Your Reown Project ID |
+| `.env.example` / `.env` | Template for your local Reown Project ID configuration |
 | `02-wallet-module/networks.js` | Supported networks and default network |
 | `02-wallet-module/appkit.js` | AppKit metadata and theme |
 | `01-demo/main.js` | Example page behavior |
