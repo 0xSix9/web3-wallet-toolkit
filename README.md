@@ -3,28 +3,60 @@
 [![Build](https://github.com/0xSix9/web3-wallet-toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/0xSix9/web3-wallet-toolkit/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-A ready-to-use **EVM wallet connection starter** built with Vanilla JavaScript, [Reown AppKit](https://reown.com/appkit), and ethers v6.
+A reusable **EVM wallet connection starter** built with Vanilla JavaScript, [Reown AppKit](https://reown.com/appkit), and ethers v6.
 
-This repository is both:
-- a working Vite example that you can run and customize;
-- a reusable wallet module that you can copy into your own dApp.
+The repository is organized into three numbered sections so you can quickly find what you need:
 
-It is built around Reown AppKit—not a hand-written `window.ethereum` connection demo.
+## Project structure
 
-## What is included
+```text
+web3-wallet-toolkit/
+│
+├── 01-demo/                     # 1. Runnable example application
+│   ├── index.html               # Demo page
+│   ├── main.js                  # Demo interactions
+│   └── styles.css               # Demo styling
+│
+├── 02-wallet-module/            # 2. Reusable wallet integration code
+│   ├── appkit.js                # Reown AppKit initialization
+│   ├── index.js                 # Public API / exports
+│   ├── networks.js              # Supported EVM networks
+│   ├── network-utils.js         # Chain ID validation and lookup
+│   └── wallet.js                # Wallet state and actions
+│
+├── 03-tests/                    # 3. Unit tests
+│   └── network-utils.test.js    # Network utility tests
+│
+├── .github/workflows/           # GitHub Actions CI
+├── .env.example                 # Environment variable template
+├── .gitignore
+├── package.json                 # Dependencies and commands
+├── vite.config.js               # Vite paths and build configuration
+├── README.md
+└── LICENSE
+```
 
-- Reown's wallet connection modal and built-in `<appkit-button>`
+### Where should I start?
+
+| Your goal | Open this |
+| --- | --- |
+| See the wallet UI and run the example | `01-demo/` |
+| Reuse wallet connection in another dApp | `02-wallet-module/` |
+| Understand or run the automated tests | `03-tests/` |
+| Change dependencies or run commands | `package.json` |
+| Configure the Reown Project ID | `.env` |
+
+## Features
+
+- Reown AppKit connection modal and `<appkit-button>`
 - Injected wallet connections and WalletConnect QR connections supported by AppKit
-- Account connection state and account address
-- Network state and EVM network switching
-- Disconnect support through the AppKit session
+- Account address and connection state
+- EVM network information and network switching
+- Disconnect through the active AppKit session
 - Ethers v6 `BrowserProvider` and signer helpers
-- A small Vanilla JavaScript example interface
-- A central network list you can customize
+- One network list shared by AppKit and the demo
 
 ## Supported networks
-
-The starter is configured for:
 
 | Network | Chain ID |
 | --- | ---: |
@@ -36,7 +68,7 @@ The starter is configured for:
 | Polygon | `137` |
 | Sepolia Testnet | `11155111` |
 
-The supported list is in `src/lib/wallet/networks.js`. Remove networks you do not need or add other networks supported by Reown AppKit.
+Edit `02-wallet-module/networks.js` to add or remove networks supported by Reown AppKit.
 
 ## Requirements
 
@@ -46,86 +78,90 @@ The supported list is in `src/lib/wallet/networks.js`. Remove networks you do no
 
 ### Reown package versions
 
-The AppKit core and Ethers adapter are intentionally pinned to the same `1.8.24` release because this starter uses the Reown 1.x API. Reown AppKit 2.0.0 and its matching Ethers adapter have since been released, but this repository has **not** been migrated to that major version. Treat a v2 upgrade as a separate migration: review the official migration guidance, update both Reown packages together, and test the complete wallet flow. Do not upgrade only one package.
+The AppKit core and Ethers adapter are intentionally pinned to the same `1.8.24` release because this starter uses the Reown 1.x API. Reown AppKit 2.x is a separate major-version migration. Before upgrading, review the official migration guidance, update both Reown packages together, and test the complete wallet flow. Do not upgrade only one package.
 
-## Run the example
+## Run the demo
 
-### 1. Get your own Reown Project ID
+### 1. Get a Reown Project ID
 
 1. Open the [Reown Dashboard](https://dashboard.reown.com/).
 2. Create a project and select **AppKit**.
 3. Open the project and copy its **Project ID**.
 
-The Project ID is an application identifier used by Reown AppKit. It is not an Infura API key, private key, or wallet password.
+The Project ID identifies your frontend application. It is not a private key, seed phrase, or wallet password.
 
-### 2. Add the Project ID
+### 2. Configure the environment
 
-In the repository root, copy the example environment file:
+Run this command in the repository root:
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and replace the placeholder:
+Add your own Project ID to the `.env` file:
 
 ```env
 VITE_REOWN_PROJECT_ID=your_actual_reown_project_id
 ```
 
-Use your own Project ID. Do not commit your personal `.env` file; it is already ignored by Git.
+Keep `.env` private and do not commit it. The repository's `.gitignore` already excludes it.
 
-### 3. Install and run
+### 3. Install and start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. Click the Reown connect button and approve the connection in your wallet.
+Open the local URL printed by Vite, then click the Reown connect button.
 
-Create a production build with:
+### 4. Build and test
 
 ```bash
+npm test
 npm run build
 npm run preview
 ```
 
-### 4. Run the tests
+The tests cover Chain ID normalization, configured network lookup, unsupported networks, and invalid input. GitHub Actions runs the tests and production build on pushes and pull requests targeting `main`.
 
-Run the unit tests with:
+## Reuse the wallet module in your own Vite project
 
-```bash
-npm test
-```
-
-The tests cover chain ID normalization, configured network lookup, unsupported networks, and invalid input handling. The GitHub Actions workflow runs the tests and production build on pushes and pull requests targeting `main`.
-
-## Reuse the wallet module in another Vite project
-
-You do not need to copy the demo page or its CSS. Copy only this folder into your own project:
+You do not need the demo or its CSS. Copy only the contents of `02-wallet-module/` into your own project's wallet folder. For example:
 
 ```text
-src/lib/wallet/
-├── appkit.js
-├── index.js
-├── networks.js
-├── network-utils.js
-└── wallet.js
+your-dapp/
+└── src/
+    └── lib/
+        └── wallet/
+            ├── appkit.js
+            ├── index.js
+            ├── networks.js
+            ├── network-utils.js
+            └── wallet.js
 ```
 
-Install the required packages in your project:
+### 1. Install the dependencies
+
+In your dApp project, run:
 
 ```bash
 npm install @reown/appkit@1.8.24 @reown/appkit-adapter-ethers@1.8.24 ethers
 ```
 
-Create a `.env` file in your project root and add your own Project ID:
+### 2. Add your Project ID
+
+Create or update the `.env` file in your dApp's project root:
 
 ```env
 VITE_REOWN_PROJECT_ID=your_actual_reown_project_id
 ```
 
-Import the API from the module:
+This module expects a Vite-style `import.meta.env` environment. Other build tools may require adapting how the Project ID is provided.
+
+### 3. Import the wallet API
+
+For the example folder structure above:
 
 ```js
 import {
@@ -135,22 +171,23 @@ import {
   switchNetwork,
   getWalletState,
   subscribeToWallet,
+  getWalletProvider,
   getEthersProvider,
   getSigner,
 } from "./lib/wallet/index.js";
 ```
 
-### Add the ready-made connect button
+Importing this module initializes Reown AppKit and registers its web components.
 
-Place this web component wherever you want the connection button to appear:
+### 4. Add a connection button
+
+The simplest option is Reown's ready-made button:
 
 ```html
 <appkit-button></appkit-button>
 ```
 
-You do **not** need to add an HTML `id` or put your Project ID in this element. Importing the wallet module initializes AppKit and registers the component. The Project ID is read from `VITE_REOWN_PROJECT_ID` in your environment file.
-
-### Use a custom connect button instead
+Or use your own button:
 
 ```html
 <button id="connect-wallet" type="button">Connect wallet</button>
@@ -164,7 +201,9 @@ document
   .addEventListener("click", () => openConnectModal());
 ```
 
-### Read wallet state and listen for changes
+### 5. Read wallet state
+
+`subscribeToWallet` immediately invokes the callback with the current state and then reports account and network updates:
 
 ```js
 import {
@@ -172,11 +211,8 @@ import {
   subscribeToWallet,
 } from "./lib/wallet/index.js";
 
-// Read the current state once.
 console.log(getWalletState());
 
-// Keep your UI in sync when the user connects, disconnects,
-// changes accounts, or switches networks.
 const unsubscribe = subscribeToWallet((wallet) => {
   console.log("Connected:", wallet.isConnected);
   console.log("Address:", wallet.address);
@@ -184,10 +220,11 @@ const unsubscribe = subscribeToWallet((wallet) => {
   console.log("Chain ID:", wallet.chainId);
 });
 
-// Call unsubscribe() when this part of your app is removed.
+// Call this when the part of your app using the subscription is removed.
+unsubscribe();
 ```
 
-The callback receives:
+The state has this shape:
 
 ```js
 {
@@ -198,11 +235,11 @@ The callback receives:
 }
 ```
 
-Values are `null` when the related wallet information is not available.
+Address, Chain ID, and Chain Name are `null` when the related information is unavailable.
 
-### Switch networks
+### 6. Switch networks
 
-Pass a configured EVM chain ID:
+Pass a configured Chain ID:
 
 ```js
 import { switchNetwork } from "./lib/wallet/index.js";
@@ -211,11 +248,11 @@ await switchNetwork(8453); // Base
 await switchNetwork(1);    // Ethereum
 ```
 
-Only networks listed in `src/lib/wallet/networks.js` can be selected through this helper.
+Only networks listed in `02-wallet-module/networks.js` can be selected through this helper.
 
-### Use ethers v6
+### 7. Use ethers v6
 
-After the wallet connects, request an ethers provider or signer:
+After the wallet connects:
 
 ```js
 import {
@@ -229,51 +266,26 @@ const signer = await getSigner();
 console.log("Wallet address:", await signer.getAddress());
 ```
 
-Use the provider and signer with ethers v6 for read-only calls and user-approved contract interactions.
+Use the provider for read-only blockchain calls and the signer for user-approved contract interactions.
 
-## Project structure
+## Configuration guide
 
-```text
-web3-wallet-toolkit/
-├── .env.example
-├── .gitignore
-├── .github/
-│   └── workflows/
-│       └── build.yml             # Test and production-build checks
-├── index.html                    # Runnable example UI
-├── package.json
-├── README.md
-├── LICENSE
-└── src/
-    ├── main.js                   # Example page event handling
-    ├── styles.css                # Example page styles
-    └── lib/
-        └── wallet/
-            ├── appkit.js         # Reown AppKit initialization
-            ├── index.js          # Public import surface
-            ├── networks.js       # Supported EVM networks
-            ├── network-utils.js  # Chain ID normalization and lookup
-            ├── network-utils.test.js # Unit tests
-            └── wallet.js         # Reusable wallet actions and state
-```
-
-## Configuration
-
-- **Reown Project ID:** set `VITE_REOWN_PROJECT_ID` in your local environment file.
-- **Supported networks:** edit `src/lib/wallet/networks.js`. The AppKit configuration and the demo's network selector both use this same list, so new entries appear in the selector automatically.
-- **Default network:** change the `defaultNetwork` export in `networks.js`.
-- **App metadata and theme:** edit `src/lib/wallet/appkit.js`.
-
-This starter targets browser-based Vanilla JavaScript projects using Vite. Other frameworks and bundlers may use different environment-variable naming conventions and initialization patterns.
+| File | What it controls |
+| --- | --- |
+| `.env` | Your Reown Project ID |
+| `02-wallet-module/networks.js` | Supported networks and default network |
+| `02-wallet-module/appkit.js` | AppKit metadata and theme |
+| `01-demo/main.js` | Example page behavior |
+| `01-demo/styles.css` | Example page styling |
 
 ## Security and production notes
 
 - Never request or store a user's seed phrase or private key.
 - Never put private keys or server-side secrets in frontend code.
 - The Project ID is used by a browser application, so it is not a secret. Configure allowed domains and usage controls in the Reown Dashboard where available.
-- A connected wallet does not mean a user has approved a transaction. Always let the wallet show the transaction details and require the user's explicit approval.
+- A connected wallet does not mean a user has approved a transaction. Always let the wallet show transaction details and require explicit approval.
 - Verify chain IDs, token addresses, contract addresses, and transaction parameters before asking users to sign.
-- This repository is a reusable starter, not a security-audited wallet or smart-contract SDK. Review and test your own integration before production use.
+- This repository is a reusable starter, not a security-audited wallet or smart-contract SDK. Test your integration and review it before production use.
 
 ## References
 

@@ -5,7 +5,7 @@ import {
   subscribeToWallet,
   supportedNetworks,
   switchNetwork,
-} from "./lib/wallet/index.js";
+} from "../02-wallet-module/index.js";
 
 const connectionStatus = document.getElementById("connection-status");
 const accountAddress = document.getElementById("account-address");

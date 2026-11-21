@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { findNetworkByChainId } from "./network-utils.js";
+import { findNetworkByChainId } from "../02-wallet-module/network-utils.js";
 
 const networks = [
   { id: 1, name: "Ethereum" },
