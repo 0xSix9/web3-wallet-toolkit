@@ -247,16 +247,14 @@ web3-wallet-toolkit/
 └── src/
     ├── main.js                   # Example page event handling
     ├── styles.css                # Example page styles
-    ├── lib/
-    │   └── wallet/
-    │       ├── appkit.js         # Reown AppKit initialization
-    │       ├── index.js          # Public import surface
-    │       ├── networks.js      # Supported EVM networks
-    │       ├── network-utils.js # Chain ID normalization and lookup
-    │       └── wallet.js        # Reusable wallet actions and state
     └── lib/
         └── wallet/
-            └── network-utils.test.js # Unit tests
+            ├── appkit.js         # Reown AppKit initialization
+            ├── index.js          # Public import surface
+            ├── networks.js       # Supported EVM networks
+            ├── network-utils.js  # Chain ID normalization and lookup
+            ├── network-utils.test.js # Unit tests
+            └── wallet.js         # Reusable wallet actions and state
 ```
 
 ## Configuration
