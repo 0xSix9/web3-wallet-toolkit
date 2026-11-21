@@ -7,6 +7,7 @@ import {
   polygon,
   sepolia,
 } from "@reown/appkit/networks";
+import { findNetworkByChainId } from "./network-utils.js";
 
 // Edit this array to control which EVM networks your dApp supports.
 export const supportedNetworks = [
@@ -22,11 +23,5 @@ export const supportedNetworks = [
 export const defaultNetwork = mainnet;
 
 export function findNetwork(chainId) {
-  const numericChainId = Number(chainId);
-
-  if (!Number.isSafeInteger(numericChainId)) {
-    return undefined;
-  }
-
-  return supportedNetworks.find((network) => network.id === numericChainId);
+  return findNetworkByChainId(chainId, supportedNetworks);
 }

@@ -15,6 +15,10 @@ const networkSelect = document.getElementById("network-select");
 const disconnectButton = document.getElementById("disconnect-button");
 const feedback = document.getElementById("feedback");
 
+function getErrorMessage(error, fallback) {
+  return error?.shortMessage ?? error?.message ?? fallback;
+}
+
 // Build the selector from the same network list used by AppKit.
 // This avoids keeping two separate network lists in sync by hand.
 function populateNetworkSelect() {
@@ -53,8 +57,10 @@ function renderWallet(state) {
 }
 
 populateNetworkSelect();
+
+// subscribeToWallet immediately emits the current snapshot, so a separate
+// getWalletState() render here would duplicate the initial UI update.
 subscribeToWallet(renderWallet);
-renderWallet(getWalletState());
 
 disconnectButton.addEventListener("click", async () => {
   disconnectButton.disabled = true;
@@ -64,8 +70,11 @@ disconnectButton.addEventListener("click", async () => {
     await disconnectWallet();
     feedback.textContent = "Wallet disconnected.";
   } catch (error) {
-    feedback.textContent = error?.message ?? "Could not disconnect the wallet.";
-    disconnectButton.disabled = !getWalletState().isConnected;
+    feedback.textContent = getErrorMessage(
+      error,
+      "Could not disconnect the wallet.",
+    );
+    renderWallet(getWalletState());
   }
 });
 
@@ -76,10 +85,15 @@ networkSelect.addEventListener("change", async (event) => {
 
   try {
     await switchNetwork(selectedChainId);
-    feedback.textContent = "Network switch requested successfully.";
+    feedback.textContent = "Network switch request completed.";
   } catch (error) {
-    feedback.textContent = error?.message ?? "Could not switch network.";
+    feedback.textContent = getErrorMessage(
+      error,
+      "Could not switch network.",
+    );
   } finally {
-    networkSelect.disabled = !getWalletState().isConnected;
+    // Restore the selector to the wallet's actual network if the request fails.
+    // A later AppKit subscription update will render the new network on success.
+    renderWallet(getWalletState());
   }
 });

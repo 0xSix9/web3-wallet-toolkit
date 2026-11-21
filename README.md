@@ -1,5 +1,8 @@
 # Web3 Wallet Toolkit
 
+[![Build](https://github.com/0xSix9/web3-wallet-toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/0xSix9/web3-wallet-toolkit/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 A ready-to-use **EVM wallet connection starter** built with Vanilla JavaScript, [Reown AppKit](https://reown.com/appkit), and ethers v6.
 
 This repository is both:
@@ -37,13 +40,13 @@ The supported list is in `src/lib/wallet/networks.js`. Remove networks you do no
 
 ## Requirements
 
-- Node.js 20.19+ (or a compatible newer release)
+- Node.js 20.19+ or 22.12+
 - npm
 - A Reown AppKit Project ID from the [Reown Dashboard](https://dashboard.reown.com/)
 
 ### Reown package versions
 
-The AppKit core and Ethers adapter are intentionally pinned to the same `1.8.24` release so their APIs stay aligned with the 1.x implementation used by this starter. Reown 2.x is now available; treat upgrading to it as a separate migration and update both packages together after checking the current migration guidance. Do not bump only one of the two packages.
+The AppKit core and Ethers adapter are intentionally pinned to the same `1.8.24` release because this starter uses the Reown 1.x API. Reown AppKit 2.0.0 and its matching Ethers adapter have since been released, but this repository has **not** been migrated to that major version. Treat a v2 upgrade as a separate migration: review the official migration guidance, update both Reown packages together, and test the complete wallet flow. Do not upgrade only one package.
 
 ## Run the example
 
@@ -87,6 +90,16 @@ npm run build
 npm run preview
 ```
 
+### 4. Run the tests
+
+Run the unit tests with:
+
+```bash
+npm test
+```
+
+The tests cover chain ID normalization, configured network lookup, unsupported networks, and invalid input handling. The GitHub Actions workflow runs the tests and production build on pushes and pull requests targeting `main`.
+
 ## Reuse the wallet module in another Vite project
 
 You do not need to copy the demo page or its CSS. Copy only this folder into your own project:
@@ -96,6 +109,7 @@ src/lib/wallet/
 ├── appkit.js
 ├── index.js
 ├── networks.js
+├── network-utils.js
 └── wallet.js
 ```
 
@@ -223,17 +237,26 @@ Use the provider and signer with ethers v6 for read-only calls and user-approved
 web3-wallet-toolkit/
 ├── .env.example
 ├── .gitignore
-├── index.html                 # Runnable example UI
+├── .github/
+│   └── workflows/
+│       └── build.yml             # Test and production-build checks
+├── index.html                    # Runnable example UI
 ├── package.json
+├── README.md
+├── LICENSE
 └── src/
-    ├── main.js                # Example page event handling
-    ├── styles.css             # Example page styles
+    ├── main.js                   # Example page event handling
+    ├── styles.css                # Example page styles
+    ├── lib/
+    │   └── wallet/
+    │       ├── appkit.js         # Reown AppKit initialization
+    │       ├── index.js          # Public import surface
+    │       ├── networks.js      # Supported EVM networks
+    │       ├── network-utils.js # Chain ID normalization and lookup
+    │       └── wallet.js        # Reusable wallet actions and state
     └── lib/
         └── wallet/
-            ├── appkit.js      # Reown AppKit initialization
-            ├── index.js       # Public import surface
-            ├── networks.js    # Supported EVM networks
-            └── wallet.js     # Reusable wallet actions and state
+            └── network-utils.test.js # Unit tests
 ```
 
 ## Configuration
